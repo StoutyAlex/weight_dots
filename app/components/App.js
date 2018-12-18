@@ -1,15 +1,22 @@
 import React, { Component } from 'react';
-import {Text, View} from 'react-native';
-import styles from "../../styles";
+import {Text, View, StyleSheet} from 'react-native';
+import Cell from './Cell';
 
 export default class App extends Component {
   render() {
     return (
-      <View>
-        <Text style={styles.pp}>
-          Hello welcome to weight dots...
-        </Text>
+      <View style={style.container}>
+        <Cell />
       </View>
     );
   }
 };
+
+const style = StyleSheet.create({
+  container: {
+    flex: 1;
+    justifyContent: 'center';
+    alignItems: 'center';
+    backgroundColor: '#f5fcff';
+  },
+});
