@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import {Text, View} from 'react-native';
-import styles from "./styles";
+import styles from "../../styles";
 
-class App extends Component {
+export default class App extends Component {
   render() {
     return (
       <View>
@@ -12,6 +12,4 @@ class App extends Component {
       </View>
     );
   }
-}
-
-export default App;
+};
