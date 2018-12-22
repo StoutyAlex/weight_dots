@@ -18,7 +18,10 @@ const numColumns = 1;
 export default class App extends Component {
 
   renderItem({ item, index }) {
-    return <Month month={item.month}/>
+    return <Month
+        month={item.month}
+        year={item.year}
+      />
   }
 
   render() {
@@ -37,14 +40,37 @@ const FakeData = [
   {
     key: 1,
     month:12,
+    year:2018
   },
   {
     key: 2,
     month:1,
+    year:2019,
   },
   {
     key: 3,
     month:2,
+    year:2019,
+  },
+  {
+    key: 4,
+    month:3,
+    year:2019,
+  },
+  {
+    key: 5,
+    month:4,
+    year:2019,
+  },
+  {
+    key: 6,
+    month:5,
+    year:2019,
+  },
+  {
+    key: 7,
+    month:6,
+    year:2019,
   }
 ]
 
@@ -53,8 +79,5 @@ const style = StyleSheet.create({
     flex: 1,
     paddingLeft: 8,
     paddingRight: 8,
-    // justifyContent: 'center',
-    // alignItems: 'center',
-    // backgroundColor: '#f5fcff',
   },
 });

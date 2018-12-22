@@ -2,19 +2,11 @@ import React from 'react';
 import {View, StyleSheet, FlatList, Text} from 'react-native';
 import Cell from './Cell';
 import moment from 'moment';
+import Config from '../config';
+import {formatData, getMonthName} from '../util'; 
+import MonthHeader from './MonthHeader';
 
-const formatData = (data, numColumns) => {
-  const numberOfFullRows = Math.floor(data.length / numColumns);
-  
-  let numberOfElementsLastRow = data.length - (numberOfFullRows * numColumns);
-  while (numberOfElementsLastRow !== numColumns && numberOfElementsLastRow !== 0) {
-    data.push({ key: `blank-${numberOfElementsLastRow}`, empty: true });
-    numberOfElementsLastRow++;
-  }
-  return data;
-};
-
-const numColumns = 7;
+const numColumns = Config.numColumns;
 
 class Month extends React.Component {
   constructor(props){
@@ -27,7 +19,9 @@ class Month extends React.Component {
     const days = [];
     for(var i = 0; i < this.daysInMonth; i++) {
       days.push({
-        day: i+1,
+        day: i + 1,
+        month: this.props.month,
+        year: this.props.year,
         status: 0
       });
     }
@@ -35,16 +29,25 @@ class Month extends React.Component {
   }
 
   renderItem({ item, index }) {
+    const date = moment().get('date');
+    const month = moment().get('month') + 1;
+    const year = moment().get('year');
+    let currentDay = false;
+
+    if(date === item.day && item.month === month && item.year === year)
+      currentDay = true;
+
     return <Cell 
       day={item.day}
       status={item.status}
+      currentDay={currentDay}
     />
-  };
+  }
 
   render() {
     return (
       <View>
-        <Text>{this.props.month}  {this.daysInMonth}</Text>
+        <MonthHeader style={{flex: 1}}month={getMonthName(this.props.month)}/>
         <FlatList 
           data={formatData(this.days, numColumns)}
           style={style.container}
@@ -62,23 +65,5 @@ const style = StyleSheet.create({
     margin: 'auto'
   }
 })
-
-const FakeData = [
-  {
-    key: 1,
-    day: 1,
-    status: 1,
-  },
-  {
-    key: 2,
-    day: 2,
-    status: 2,
-  },
-  {
-    key: 3,
-    day: 3,
-    status: 1,
-  }
-];
 
 export default Month;
