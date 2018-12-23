@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Text, StyleSheet, Dimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Config from '../config';
 
 //Possible not need class
 class MonthHeader extends React.Component {
@@ -9,15 +10,15 @@ class MonthHeader extends React.Component {
     return (
       <View style={{flexDirection: 'row'}}>
         <View style={{paddingRight: 10, flexDirection: 'row'}}>
-          <Icon name='square' size={20} color={'#80ff00'} />
+          <Icon name='square' size={20} color={Config.colors.good} />
           <Text style={[{paddingLeft: 5}, styles.statText]}>{39}</Text>
         </View>
         <View style={{paddingRight: 10, flexDirection: 'row'}}>
-          <Icon name='square' size={20} color={'#ffbf00'} />
+          <Icon name='square' size={20} color={Config.colors.ok} />
           <Text style={[{paddingLeft: 5}, styles.statText]}>{12}</Text>
         </View>
         <View style={{flexDirection: 'row'}}>
-          <Icon name='square' size={20} color={'#ff4000'} />
+          <Icon name='square' size={20} color={Config.colors.bad} />
           <Text style={[{paddingLeft: 5}, styles.statText]}>{21}</Text>
         </View>
       </View>

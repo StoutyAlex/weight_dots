@@ -25,14 +25,14 @@ class Cell extends Component {
 
 const style = StyleSheet.create({
   currentDay: {
-    backgroundColor: '#ffff00'
+    backgroundColor: Config.colors.current
   },
   text: {
     fontWeight: 'bold',
     fontSize: 22 + (Config.numColumns % Config.maxColumns),
   },
   cellSphere: {
-    backgroundColor: '#d9d9d9', 
+    backgroundColor: Config.colors.unset,
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
@@ -42,7 +42,7 @@ const style = StyleSheet.create({
     width: (Dimensions.get('window').width / Config.numColumns ) - Config.numColumns
   },
   cellSquare: {
-    backgroundColor: '#d9d9d9', 
+    backgroundColor: Config.colors.unset, 
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
