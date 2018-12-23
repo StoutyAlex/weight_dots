@@ -2,7 +2,9 @@
 // Shapes = SQUARE | SPHERE
 
 const Config = {
-  numColumns : 7,
+  maxColumns: 8,
+  minColumns: 4,
+  numColumns: 7,
   cell: {
     shape: 'SQUARE'
   }

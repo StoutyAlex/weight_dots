@@ -29,27 +29,25 @@ const style = StyleSheet.create({
   },
   text: {
     fontWeight: 'bold',
-    fontSize: 24 + (Config.numColumns % 7),
+    fontSize: 22 + (Config.numColumns % Config.maxColumns),
   },
   cellSphere: {
-    backgroundColor: '#f00', 
+    backgroundColor: '#d9d9d9', 
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
     margin: 3,
     borderRadius: ((Dimensions.get('window').width / Config.numColumns ) - Config.numColumns ) / 2,
-    backgroundColor: 'red',
     height: (Dimensions.get('window').width / Config.numColumns ) - Config.numColumns,
     width: (Dimensions.get('window').width / Config.numColumns ) - Config.numColumns
   },
   cellSquare: {
-    backgroundColor: '#f00', 
+    backgroundColor: '#d9d9d9', 
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
     margin: 3,
     borderRadius: Dimensions.get('window').width / 25,
-    backgroundColor: 'red',
     height: (Dimensions.get('window').width / Config.numColumns ) - Config.numColumns
   },
   emptyCell: {
