@@ -3,7 +3,7 @@
 
 const Config = {
   maxColumns: 8,
-  minColumns: 4,
+  minColumns: 7,
   numColumns: 7,
   cell: {
     shape: 'SQUARE'

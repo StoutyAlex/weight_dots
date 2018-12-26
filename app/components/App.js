@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import {Text, View, StyleSheet, FlatList} from 'react-native';
+import {Text, View, StyleSheet, FlatList, Dimensions} from 'react-native';
 import Month from './Month';
+import Selector from './Selector';
 
 const formatData = (data, numColumns) => {
   const numberOfFullRows = Math.floor(data.length / numColumns);
@@ -26,12 +27,17 @@ export default class App extends Component {
 
   render() {
     return (
-      <FlatList
-        data={formatData(FakeData, numColumns)}
-        style={style.container}
-        renderItem={this.renderItem}
-        numColumns={numColumns}
-      />
+      <View style={style.container}>
+        <View style={style.monthContainer}>
+          <FlatList
+            data={formatData(FakeData, numColumns)}
+            style={style.monthContainer}
+            renderItem={this.renderItem}
+            numColumns={numColumns}
+          />
+        </View>
+        <Selector />
+      </View>
     );
   }
 };
@@ -41,43 +47,23 @@ const FakeData = [
     key: 1,
     month:12,
     year:2018
-  },
-  {
-    key: 2,
-    month:1,
-    year:2019,
-  },
-  {
-    key: 3,
-    month:2,
-    year:2019,
-  },
-  {
-    key: 4,
-    month:3,
-    year:2019,
-  },
-  {
-    key: 5,
-    month:4,
-    year:2019,
-  },
-  {
-    key: 6,
-    month:5,
-    year:2019,
-  },
-  {
-    key: 7,
-    month:6,
-    year:2019,
-  }
+  }, // Working on the home page
+  // {
+  //   key: 2,
+  //   month:1,
+  //   year:2019,
+  // }
 ]
-
+// tobe home page
 const style = StyleSheet.create({
   container: {
     flex: 1,
     paddingLeft: 8,
     paddingRight: 8,
+  },
+  monthContainer: {
+    // flex: 1,
+    height: Dimensions.get('window').height * 0.5,
+    marginBottom: -25,
   },
 });

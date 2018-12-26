@@ -46,7 +46,7 @@ class Month extends React.Component {
 
   render() {
     return (
-      <View>
+      <View style={style.border}>
         <MonthHeader style={{flex: 1}}month={getMonthName(this.props.month)}/>
         <FlatList 
           data={formatData(this.days, numColumns)}
@@ -62,7 +62,14 @@ class Month extends React.Component {
 const style = StyleSheet.create({
   container: {
     flex: 1,
-    margin: 'auto'
+    margin: 'auto',
+    paddingBottom: 10,
+  },
+  border: {
+    borderBottomWidth: 1,
+    borderColor: '#000',
+    marginLeft: 5,
+    marginRight: 5,
   }
 })
 
