@@ -7,8 +7,8 @@ import moment from 'moment';
 const mockStorage = {
   hasSelected: true,
   lastSelectedDate: {
-    day: 30,
-    month: 12,
+    day: 2,
+    month: 1,
     year: 2019,
   },
 };
@@ -45,30 +45,33 @@ class Selector extends React.Component {
     );
   }
 
-  timeTillNextSelect() {  // prep for counting to 21 9pm
+  timeTillNextSelect() {
     let currentTime = moment();
     const yesterday = moment().subtract(1, 'days');
     const prev = mockStorage.lastSelectedDate;
+    let countTo = 0;
 
-    if (currentTime.date() === prev.day && currentTime.month() === prev.month && currentTime.year() === prev.year){
-      // last selected day is today
-      // Count to 9pm next day
-    } else if (yesterday.date() == prev.day && yesterday.month() === prev.month && yesterday.year() === prev.year){
-      // last selected day was yesterday
-      // count to 9pm today
+    if (currentTime.date() === prev.day && currentTime.month() + 1 === prev.month && currentTime.year() === prev.year){
+      const tomorrow = moment().add({days: 1});
+      countTo = tomorrow.hour(21).minute(0).second(0).unix()
+      console.log(countTo);
+    } else if (yesterday.date() == prev.day && yesterday.month() + 1 === prev.month && yesterday.year() === prev.year){
+      countTo = moment().hour(21).minute(0).second(0).unix();
     }
+    return countTo - currentTime.unix();
   }
 
   renderCountDown() {
     return (
       <View>
         <Text style={{width: '100%', textAlign: 'center', fontSize: 20, color: '#000', paddingBottom: 5}}>
-            Please come back in: {moment().hour(21).minute(0).second(0).unix()}
+            Please come back in:
         </Text>
         <View style={styles.timeContainer}>
           <TimerCountdown
-            initialSecondsRemaining={100000*60}
+            initialSecondsRemaining={this.timeTillNextSelect()*1000}
             style={{ fontSize: 70 }}
+            interval={1000}
           />
         </View>
       </View>
