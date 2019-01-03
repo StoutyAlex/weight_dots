@@ -45,8 +45,18 @@ class Selector extends React.Component {
     );
   }
 
-  timeTillNextSelect() {  // prep for counting to 21
-    let currentTime = moment().hour(21);
+  timeTillNextSelect() {  // prep for counting to 21 9pm
+    let currentTime = moment();
+    const yesterday = moment().subtract(1, 'days');
+    const prev = mockStorage.lastSelectedDate;
+
+    if (currentTime.date() === prev.day && currentTime.month() === prev.month && currentTime.year() === prev.year){
+      // last selected day is today
+      // Count to 9pm next day
+    } else if (yesterday.date() == prev.day && yesterday.month() === prev.month && yesterday.year() === prev.year){
+      // last selected day was yesterday
+      // count to 9pm today
+    }
   }
 
   renderCountDown() {
