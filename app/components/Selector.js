@@ -14,6 +14,18 @@ const mockStorage = {
 };
 
 class Selector extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      mockStorage : {
+        hasSelected: true,
+        lastSelectedDate: {
+          day: 2,
+          month: 1,
+          year: 2019,
+        },
+    }};
+  }
 
   renderButtons() {
     return (
@@ -24,19 +36,19 @@ class Selector extends React.Component {
         <View style={styles.container}>
           <CustomButton
             text="Good"
-            onPress={() => {}}
+            onPress={() => this.handleSelection('good')}
             color='#baed91'
             style={styles.cellPadding}
           />
           <CustomButton
             text="Okay"
-            onPress={() => {}}
+            onPress={() => this.handleSelection('okay')}
             color='#f8b88b'
             style={styles.cellPadding}
           />
           <CustomButton
             text="Bad"
-            onPress={() => {}}
+            onPress={() => this.handleSelection('bad')}
             color='#fea3aa'
             style={styles.cellPadding}
           />
@@ -45,16 +57,28 @@ class Selector extends React.Component {
     );
   }
 
+  handleSelection(selection) {
+    this.setState({
+      mockStorage: {
+        hasSelected: true,
+        lastSelectedDate: {
+          day: moment().date(),
+          month: moment().month() + 1,
+          year: moment().year(),
+        },
+      }}
+    );
+  }
+
   timeTillNextSelect() {
     let currentTime = moment();
     const yesterday = moment().subtract(1, 'days');
-    const prev = mockStorage.lastSelectedDate;
+    const prev = this.state.mockStorage.lastSelectedDate;
     let countTo = 0;
 
     if (currentTime.date() === prev.day && currentTime.month() + 1 === prev.month && currentTime.year() === prev.year){
       const tomorrow = moment().add({days: 1});
       countTo = tomorrow.hour(21).minute(0).second(0).unix()
-      console.log(countTo);
     } else if (yesterday.date() == prev.day && yesterday.month() + 1 === prev.month && yesterday.year() === prev.year){
       countTo = moment().hour(21).minute(0).second(0).unix();
     }
@@ -79,11 +103,14 @@ class Selector extends React.Component {
   }
 
   canSelect() {
-    return true;
+    console.log("Can select: " + this.timeTillNextSelect());
+    if (this.timeTillNextSelect() <= 0)
+      return true;
+    return false;
   }
 
   renderBody() {
-    if (this.canSelect() === false) {
+    if (this.canSelect()) {
       return this.renderButtons();
     } else {
       return this.renderCountDown();
