@@ -17,14 +17,21 @@ class Selector extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      mockStorage : {
         hasSelected: true,
         lastSelectedDate: {
           day: 2,
           month: 1,
           year: 2019,
         },
-    }};
+    };
+  }
+
+  componentDidMount() {
+    this.interval = setInterval(() => {
+      if (this.timeTillNextSelect() <= 0) {
+        this.setState({hasSelected: true});
+      }
+    }, 2000);
   }
 
   renderButtons() {
@@ -58,31 +65,32 @@ class Selector extends React.Component {
   }
 
   handleSelection(selection) {
+    this.props.onSelected(4, 1, 2019, selection);
     this.setState({
-      mockStorage: {
         hasSelected: true,
         lastSelectedDate: {
           day: moment().date(),
           month: moment().month() + 1,
           year: moment().year(),
         },
-      }}
+      }
     );
   }
 
   timeTillNextSelect() {
     let currentTime = moment();
     const yesterday = moment().subtract(1, 'days');
-    const prev = this.state.mockStorage.lastSelectedDate;
+    const prev = this.state.lastSelectedDate;
     let countTo = 0;
 
     if (currentTime.date() === prev.day && currentTime.month() + 1 === prev.month && currentTime.year() === prev.year){
       const tomorrow = moment().add({days: 1});
-      countTo = tomorrow.hour(21).minute(0).second(0).unix()
+      countTo = tomorrow.hour(21).minute(0).second(0).unix() // Change back to hour 21
     } else if (yesterday.date() == prev.day && yesterday.month() + 1 === prev.month && yesterday.year() === prev.year){
-      countTo = moment().hour(21).minute(0).second(0).unix();
+      countTo = moment().hour(21).minute(0).second(0).unix(); // Change back to hour 21
     }
-    return countTo - currentTime.unix();
+    const timeTillNextSelect = countTo - currentTime.unix();
+    return timeTillNextSelect;
   }
 
   renderCountDown() {
@@ -103,9 +111,9 @@ class Selector extends React.Component {
   }
 
   canSelect() {
-    console.log("Can select: " + this.timeTillNextSelect());
-    if (this.timeTillNextSelect() <= 0)
+    if (this.timeTillNextSelect() <= 0) {
       return true;
+    }
     return false;
   }
 

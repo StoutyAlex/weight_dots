@@ -3,6 +3,18 @@ import {Text, View, StyleSheet, Dimensions} from 'react-native';
 import Config from '../config';
 
 class Cell extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      selected: (this.props.status ? true : false),
+    };
+  }
+
+  // componentDidMount() {
+  //   console.log(`${this.props.status}`);
+  //   console.log(`${this.state.selected}`);
+  // }
+
   render() {
     const getStyle = () => {
       if (!this.props.day) return style.emptyCell;
@@ -11,7 +23,7 @@ class Cell extends Component {
     };
 
     const isCurrentDay = () => {
-      if (!this.props.currentDay) return null;
+      if (!this.props.currentDay && !this.state.selected) return null;
       return style.currentDay;
     };
 

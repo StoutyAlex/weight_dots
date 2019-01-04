@@ -5,27 +5,46 @@ import moment from 'moment';
 import Config from '../config';
 import {formatData, getMonthName} from '../util'; 
 import MonthHeader from './MonthHeader';
+import { getMonth } from '../util/LocalStorage';
 
 const numColumns = Config.numColumns;
 
 class Month extends React.Component {
   constructor(props){
     super(props)
+    this.state = {
+      days: this.createMonth(this.props.selected),
+    };
     this.daysInMonth = moment(this.props.month, 'M').daysInMonth();
-    this.days = this.createMonth();
   }
 
-  createMonth() {
+  createMonth(storageDays) {
     const days = [];
     for(var i = 0; i < this.daysInMonth; i++) {
       days.push({
         day: i + 1,
         month: this.props.month,
         year: this.props.year,
-        status: 0
+        status: storageDays[`${i + 1}`],
       });
     }
     return days;
+  }
+
+  componentDidMount() {
+    getMonth(this.props.month, this.props.year).then((value) => {
+      this.setState({
+        days: this.createMonth(value),
+      });
+    });
+  }
+
+  componentWillReceiveProps(props) {
+    console.log('Updated');
+    console.log(props.selected);
+    if (this.props.selected !== props.selected) {
+      this.setState({ days: this.createMonth(props.selected)});
+    };
   }
 
   renderItem({ item, index }) {
@@ -45,14 +64,16 @@ class Month extends React.Component {
   }
 
   render() {
+    console.log(this.props.selected);
     return (
       <View style={style.border}>
         <MonthHeader style={{flex: 1}}month={getMonthName(this.props.month)}/>
         <FlatList 
-          data={formatData(this.days, numColumns)}
+          data={formatData(this.state.days, numColumns)}
           style={style.container}
           renderItem={this.renderItem}
           numColumns={numColumns}
+          extraData={this.state}
       />
     </View>
     );
@@ -61,7 +82,7 @@ class Month extends React.Component {
 
 const style = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     margin: 'auto',
     paddingBottom: 10,
   },

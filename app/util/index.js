@@ -6,6 +6,9 @@ const formatData = (data, numColumns) => {
     data.push({ key: `blank-${numberOfElementsLastRow}`, empty: true });
     numberOfElementsLastRow++;
   }
+  // if (data.length <= 28) {
+  //   data.push({ key: `blank-${numberOfElementsLastRow}`, empty: true });
+  // }
   return data;
 };
 
