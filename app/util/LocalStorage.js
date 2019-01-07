@@ -17,7 +17,7 @@ const loadItem = async key => {
 const saveItem = async (key, item) => {
   try {
     await AsyncStorage.setItem(key, item);
-    console.log(`Saved item: ${item} to key: ${key}`);
+    // console.log(`Saved item: ${item} to key: ${key}`);
   } catch (error) {
     console.log(`Error saving data\n${error}`);
   }
@@ -28,7 +28,6 @@ const saveRecord = async (month, year, date, value) => {
   try {
     tempMonth = await loadItem(`${month}-${year}`);
     if (tempMonth === null) {
-      console.log('No month already saved using new month');
       tempMonth = {};
       tempMonth[date] = value;
     } else {
@@ -36,7 +35,7 @@ const saveRecord = async (month, year, date, value) => {
       tempMonth[date] = value;
     }
     await saveItem(`${month}-${year}`, JSON.stringify(tempMonth));
-    console.log(`Saved month ${month}-${year} at date ${date}\n${tempMonth}`);
+    // console.log(`Saved month ${month}-${year} at date ${date}\n${tempMonth}`);
     return tempMonth;
   } catch (error) {
     console.log(`Problem saving month ${month}-${year}\n${error}`);
@@ -56,9 +55,18 @@ const getMonth = async (month, year) => {
   }
 };
 
+const clear = async (month, year) => {
+  try {
+    await saveItem(`${month}-${year}`, JSON.stringify({}));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export {
   loadItem,
   saveItem,
   saveRecord,
   getMonth,
+  clear,
 }

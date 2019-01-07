@@ -32,6 +32,8 @@ class Month extends React.Component {
   }
 
   componentDidMount() {
+    console.log('CDM Month');
+    console.log(this.props.selected);
     getMonth(this.props.month, this.props.year).then((value) => {
       this.setState({
         days: this.createMonth(value),
@@ -40,8 +42,6 @@ class Month extends React.Component {
   }
 
   componentWillReceiveProps(props) {
-    console.log('Updated');
-    console.log(props.selected);
     if (this.props.selected !== props.selected) {
       this.setState({ days: this.createMonth(props.selected)});
     };
@@ -64,7 +64,6 @@ class Month extends React.Component {
   }
 
   render() {
-    console.log(this.props.selected);
     return (
       <View style={style.border}>
         <MonthHeader style={{flex: 1}}month={getMonthName(this.props.month)}/>
@@ -74,6 +73,7 @@ class Month extends React.Component {
           renderItem={this.renderItem}
           numColumns={numColumns}
           extraData={this.state}
+          keyExtractor={item => `${item.day}-${item.month}`}
       />
     </View>
     );

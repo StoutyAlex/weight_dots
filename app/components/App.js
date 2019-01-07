@@ -3,7 +3,7 @@ import {Text, View, StyleSheet, FlatList, Dimensions, AsyncStorage} from 'react-
 import Month from './Month';
 import Selector from './Selector';
 import CustomButton from './CustomButton';
-import { saveRecord, saveItem, getMonth } from '../util/LocalStorage';
+import { saveRecord, clear, getMonth } from '../util/LocalStorage';
 import moment from 'moment';
 
 const formatData = (data, numColumns) => {
@@ -27,16 +27,27 @@ export default class App extends Component {
       currentYear: moment().year(),
       updated: true,
       selected: {},
+      loaded: false,
     };
   }
 
   // SHOW LIST
   renderItem({ item, index }) {
+    console.log('rendering month');
     return <Month
         month={item.month}
         year={item.year}
-        ref={this.monthChild}
+        selected={item.selected}
     />
+  }
+
+  async loadMonth(){
+    let value = await getMonth(this.state.currentMonth, this.state.currentYear);
+    console.log('Loaded month');
+    this.setState({
+      selected: value,
+      loaded: true,
+    })
   }
 
   // SHOW LIST
@@ -44,18 +55,16 @@ export default class App extends Component {
       key: 1,
       month: this.state.currentMonth,
       year: this.state.currentYear,
+      selected: this.state.selected,
   }];
 
-  componentDidMount() {
-    getMonth(this.state.currentMonth, this.state.currentYear).then( value => {
-      this.setState({selected: value});
-    });
+  async componentWillMount() {
+    await this.loadMonth();
   };
 
   onSelected(day, month, year, selected) {
-    saveRecord(1, 2019, 21, 3).then((selected) => {
-      this.setState({selected});
-    })
+    let value = saveRecord(1, 2019, 2, 3);
+    this.setState({selected: value});
   };
 
   getStyle() {
@@ -68,34 +77,39 @@ export default class App extends Component {
   render() {
     return (
       <View style={{flex: 1}}>
-        <View style={this.getStyle()}>
-          <FlatList
-            data={formatData(this.formatMonth(), numColumns)}
-            style={style.flatListContainer}
-            renderItem={this.renderItem}
-            numColumns={numColumns}
-            extraData={this.state}
+        { this.state.loaded &&
+        <View style={{flex: 1}}>
+          <View style={this.getStyle()}>
+            <FlatList
+              data={formatData(this.formatMonth(), numColumns)}
+              style={style.flatListContainer}
+              renderItem={this.renderItem.bind(this)}
+              numColumns={numColumns}
+              extraData={this.state}
+              keyExtractor={item => `${item.month}-${item.year}`}
+            />
+            {/* <Month
+              month={this.state.currentMonth}
+              year={this.state.currentYear}
+              style={this.getStyle()}
+              selected={this.state.selected}
+              /> */}
+          </View>
+          <Selector 
+            onSelected={this.onSelected}
           />
-          {/* <Month
-            month={this.state.currentMonth}
-            year={this.state.currentYear}
-            style={this.getStyle()}
-            selected={this.state.selected}
-            /> */}
-        </View>
-        <Selector 
-          onSelected={this.onSelected}
-        />
-        {/* <CustomButton
-          text="Save"
-          onPress={() => saveRecord(1, 2019, 1, 3)}
-          color='#baed91'
-        />
-        <CustomButton
-          text="Load"
-          onPress={() => saveItem('test', { 1: 'hi' })}
-          color='#ffed91'
-        /> */}
+          {/* {/* <CustomButton
+            text="Save"
+            onPress={() => saveRecord(1, 2019, 1, 3)}
+            color='#baed91'
+          /> */}
+          <CustomButton
+            text="clear"
+            onPress={() => clear(1, 2019)}
+            color='#ffed91'
+          />
+        </View> 
+      }
       </View>
     );
   }
