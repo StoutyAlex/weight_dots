@@ -13,6 +13,7 @@ const mockStorage = {
   },
 };
 
+// TODO Implement last selected date in storage
 class Selector extends React.Component {
   constructor(props) {
     super(props);

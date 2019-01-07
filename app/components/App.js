@@ -65,9 +65,7 @@ export default class App extends Component {
     await this.loadMonth();
   };
 
-  //Todo implement this 
   async onSelected(day, month, year, selected) {
-    // console.log(`${day} ${month} ${year} ${selected}`);
     let value = await saveRecord(day, month, year, selected);
     this.setState({selected: value, selectedDay: day});
   };
