@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, FlatList, Text} from 'react-native';
+import {View, StyleSheet, FlatList, Text, ListView} from 'react-native';
 import Cell from './Cell';
 import moment from 'moment';
 import Config from '../config';
@@ -13,37 +13,60 @@ class Month extends React.Component {
   constructor(props){
     super(props)
     this.state = {
-      days: this.createMonth(this.props.selected),
+      days: this.setData(this.props.selected, 99),
+      update: 0,
+      selectedDay: this.props.selectedDay,
     };
     this.daysInMonth = moment(this.props.month, 'M').daysInMonth();
   }
 
-  createMonth(storageDays) {
+  setData(selectedDays, selectedDay){
+    this.createdMonth = this.createMonth(selectedDays, selectedDay);
+    return formatData(this.createdMonth, numColumns);
+  }
+
+  createMonth(storageDays, selectedDay) {
     const days = [];
     for(var i = 0; i < this.daysInMonth; i++) {
+      if (i === selectedDay) {
+        days.push([{
+          day: i + 1,
+          month: this.props.month,
+          year: this.props.year,
+          status: storageDays[`${i + 1}`], 
+        }]);
+      } else {
       days.push({
         day: i + 1,
         month: this.props.month,
         year: this.props.year,
         status: storageDays[`${i + 1}`],
       });
+      }
     }
     return days;
   }
 
+  findChangedDay(newSelected){
+
+  }
+
   componentDidMount() {
-    console.log('CDM Month');
-    console.log(this.props.selected);
     getMonth(this.props.month, this.props.year).then((value) => {
+      const tempDays = this.setData(value, 99);
       this.setState({
-        days: this.createMonth(value),
+        days: tempDays,
       });
     });
   }
 
   componentWillReceiveProps(props) {
     if (this.props.selected !== props.selected) {
-      this.setState({ days: this.createMonth(props.selected)});
+      const tempDays = this.setData(props.selected, props.selectedDay);
+      this.setState({
+        days: tempDays,
+        update: this.state.update + 1,
+      });
     };
   }
 
@@ -51,7 +74,11 @@ class Month extends React.Component {
     const date = moment().get('date');
     const month = moment().get('month') + 1;
     const year = moment().get('year');
-    let currentDay = false;
+    let currentDay = false; 
+    
+    if (item instanceof Array) {
+      item = item[0];
+    }
 
     if(date === item.day && item.month === month && item.year === year)
       currentDay = true;
@@ -67,14 +94,14 @@ class Month extends React.Component {
     return (
       <View style={style.border}>
         <MonthHeader style={{flex: 1}}month={getMonthName(this.props.month)}/>
-        <FlatList 
-          data={formatData(this.state.days, numColumns)}
-          style={style.container}
-          renderItem={this.renderItem}
-          numColumns={numColumns}
-          extraData={this.state}
-          keyExtractor={item => `${item.day}-${item.month}`}
-      />
+          <FlatList 
+            data={this.state.days}
+            style={style.container}
+            renderItem={this.renderItem}
+            numColumns={numColumns}
+            extraData={this.state.days}
+            keyExtractor={item => `${item.day}-${item.month}`}
+          />
     </View>
     );
   }

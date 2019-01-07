@@ -23,7 +23,7 @@ const saveItem = async (key, item) => {
   }
 };
 
-const saveRecord = async (month, year, date, value) => {
+const saveRecord = async (date, month, year, value) => {
   let tempMonth = null;
   try {
     tempMonth = await loadItem(`${month}-${year}`);

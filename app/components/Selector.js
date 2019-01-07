@@ -17,6 +17,7 @@ class Selector extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+        currentDay: moment(),
         hasSelected: true,
         lastSelectedDate: {
           day: 2,
@@ -43,19 +44,19 @@ class Selector extends React.Component {
         <View style={styles.container}>
           <CustomButton
             text="Good"
-            onPress={() => this.handleSelection('good')}
+            onPress={() => this.handleSelection(1)}
             color='#baed91'
             style={styles.cellPadding}
           />
           <CustomButton
             text="Okay"
-            onPress={() => this.handleSelection('okay')}
+            onPress={() => this.handleSelection(2)}
             color='#f8b88b'
             style={styles.cellPadding}
           />
           <CustomButton
             text="Bad"
-            onPress={() => this.handleSelection('bad')}
+            onPress={() => this.handleSelection(3)}
             color='#fea3aa'
             style={styles.cellPadding}
           />
@@ -65,7 +66,11 @@ class Selector extends React.Component {
   }
 
   handleSelection(selection) {
-    this.props.onSelected(4, 1, 2019, selection);
+    const date = this.state.currentDay.date();
+    const month = this.state.currentDay.month() + 1;
+    const year = this.state.currentDay.year();
+
+    this.props.onSelected(date, month, year, selection);
     this.setState({
         hasSelected: true,
         lastSelectedDate: {

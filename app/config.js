@@ -9,9 +9,9 @@ const Config = {
     shape: 'SQUARE'
   },
   colors: {
-    bad: '#ff4000',
-    ok: '#ffbf00',
-    good: '#80ff00',
+    bad: '#fea3aa',
+    ok: '#f8b88b',
+    good: '#baed91',
     current: '#ffff00',
     unset: '#d9d9d9',
   }

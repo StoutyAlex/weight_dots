@@ -7,13 +7,9 @@ class Cell extends Component {
     super(props);
     this.state = {
       selected: (this.props.status ? true : false),
+      status: this.props.status,
     };
   }
-
-  // componentDidMount() {
-  //   console.log(`${this.props.status}`);
-  //   console.log(`${this.state.selected}`);
-  // }
 
   render() {
     const getStyle = () => {
@@ -27,8 +23,14 @@ class Cell extends Component {
       return style.currentDay;
     };
 
+    const getSelectedColor = () => {
+      if (this.props.status === 1) return style.goodDay;
+      if (this.props.status === 2) return style.okDay;
+      if (this.props.status === 3) return style.badDay;
+    };
+
     return (
-      <View style={[getStyle(), isCurrentDay()]}>
+      <View style={[getStyle(), isCurrentDay(), getSelectedColor()]}>
         <Text style={style.text}>{this.props.day}</Text>
       </View>
     )
@@ -38,6 +40,15 @@ class Cell extends Component {
 const style = StyleSheet.create({
   currentDay: {
     backgroundColor: Config.colors.current
+  },
+  goodDay: {
+    backgroundColor: Config.colors.good
+  },
+  badDay: {
+    backgroundColor: Config.colors.bad
+  },
+  okDay: {
+    backgroundColor: Config.colors.ok
   },
   text: {
     fontWeight: 'bold',

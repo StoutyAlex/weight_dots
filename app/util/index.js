@@ -1,5 +1,7 @@
 
 const formatData = (data, numColumns) => {
+  console.log('Formatting data');
+  console.log(data);
   const numberOfFullRows = Math.floor(data.length / numColumns);
   let numberOfElementsLastRow = data.length - (numberOfFullRows * numColumns);
   while (numberOfElementsLastRow !== numColumns && numberOfElementsLastRow !== 0) {

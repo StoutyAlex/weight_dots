@@ -28,6 +28,7 @@ export default class App extends Component {
       updated: true,
       selected: {},
       loaded: false,
+      selectedDay: 100,
     };
   }
 
@@ -38,6 +39,7 @@ export default class App extends Component {
         month={item.month}
         year={item.year}
         selected={item.selected}
+        selectedDay={item.selectedDay}
     />
   }
 
@@ -56,15 +58,18 @@ export default class App extends Component {
       month: this.state.currentMonth,
       year: this.state.currentYear,
       selected: this.state.selected,
+      selectedDay: this.state.selectedDay,
   }];
 
   async componentWillMount() {
     await this.loadMonth();
   };
 
-  onSelected(day, month, year, selected) {
-    let value = saveRecord(1, 2019, 2, 3);
-    this.setState({selected: value});
+  //Todo implement this 
+  async onSelected(day, month, year, selected) {
+    // console.log(`${day} ${month} ${year} ${selected}`);
+    let value = await saveRecord(day, month, year, selected);
+    this.setState({selected: value, selectedDay: day});
   };
 
   getStyle() {
@@ -83,7 +88,7 @@ export default class App extends Component {
             <FlatList
               data={formatData(this.formatMonth(), numColumns)}
               style={style.flatListContainer}
-              renderItem={this.renderItem.bind(this)}
+              renderItem={this.renderItem}
               numColumns={numColumns}
               extraData={this.state}
               keyExtractor={item => `${item.month}-${item.year}`}
@@ -96,7 +101,7 @@ export default class App extends Component {
               /> */}
           </View>
           <Selector 
-            onSelected={this.onSelected}
+            onSelected={this.onSelected.bind(this)}
           />
           {/* {/* <CustomButton
             text="Save"
