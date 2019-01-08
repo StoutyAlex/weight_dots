@@ -2,24 +2,61 @@ import React from 'react';
 import {View, Text, StyleSheet, Dimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Config from '../config';
+import { getMonthName } from '../util';
+import { getMonth } from '../util/LocalStorage';
 
 //Possible not need class
 class MonthHeader extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      monthData: [],
+      good: 0,
+      bad: 0,
+      okay: 0,
+    }
+  }
+
+  componentWillMount() {
+    this.calculateTotals();
+  };
+
+  componentWillReceiveProps(props) {
+    this.calculateTotals();
+  }
+
+  calculateTotals = () => {
+    const { month, year } = this.props;
+    getMonth(month, year).then(monthData => {
+      let good = 0, bad = 0, okay = 0;
+      for ( day in monthData ) {
+        const status = monthData[day];
+        if (status === 1) good++;
+        if (status === 2) okay++;
+        if (status === 3) bad++;
+      };
+      this.setState({
+        good,
+        bad,
+        okay,
+      });
+    });
+  };
 
   renderStatCells() {
     return (
       <View style={{flexDirection: 'row'}}>
         <View style={{paddingRight: 10, flexDirection: 'row'}}>
           <Icon name='square' size={20} color={Config.colors.good} />
-          <Text style={[{paddingLeft: 5}, styles.statText]}>{39}</Text>
+          <Text style={[{paddingLeft: 5}, styles.statText]}>{this.state.good}</Text>
         </View>
         <View style={{paddingRight: 10, flexDirection: 'row'}}>
           <Icon name='square' size={20} color={Config.colors.ok} />
-          <Text style={[{paddingLeft: 5}, styles.statText]}>{12}</Text>
+          <Text style={[{paddingLeft: 5}, styles.statText]}>{this.state.okay}</Text>
         </View>
         <View style={{flexDirection: 'row'}}>
           <Icon name='square' size={20} color={Config.colors.bad} />
-          <Text style={[{paddingLeft: 5}, styles.statText]}>{21}</Text>
+          <Text style={[{paddingLeft: 5}, styles.statText]}>{this.state.bad}</Text>
         </View>
       </View>
     );
@@ -33,7 +70,7 @@ class MonthHeader extends React.Component {
           <View style={styles.downText}>
             <View style={styles.priceText}>
               <Text style={styles.monthText}>
-                {this.props.month}
+                {getMonthName(this.props.month)}
               </Text>
             </View>
             <View style={styles.label}>

@@ -93,7 +93,11 @@ class Month extends React.Component {
   render() {
     return (
       <View style={style.border}>
-        <MonthHeader style={{flex: 1}}month={getMonthName(this.props.month)}/>
+        <MonthHeader
+          style={{flex: 1}} 
+          month={this.props.month}
+          year={this.props.year}
+        />
           <FlatList 
             data={this.state.days}
             style={style.container}
