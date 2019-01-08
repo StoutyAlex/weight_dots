@@ -3,17 +3,10 @@ import { View, Text, StyleSheet, Dimensions, TouchableHighlight } from 'react-na
 import CustomButton from './CustomButton';
 import TimerCountdown from 'react-native-timer-countdown';
 import moment from 'moment';
+import { saveItem, loadItem } from '../util/LocalStorage';
 
-const mockStorage = {
-  hasSelected: true,
-  lastSelectedDate: {
-    day: 2,
-    month: 1,
-    year: 2019,
-  },
-};
-
-// TODO Implement last selected date in storage
+// TODO Implement configStore for user configuration 
+// To reduce localstorage function calls
 class Selector extends React.Component {
   constructor(props) {
     super(props);
@@ -26,6 +19,22 @@ class Selector extends React.Component {
           year: 2019,
         },
     };
+  }
+
+  getLastSelectedDate = async () => {
+    return await loadItem('last-selected-date');
+  };
+
+  saveLastSelectedDate = async (date) => {
+    return await saveItem('last-selected-date', date);
+  }
+
+  componentWillMount() {
+    this.getLastSelectedDate().then(date => {
+      if (date) {
+        this.setState({ lastSelectedDate: date });
+      }
+    });
   }
 
   componentDidMount() {
@@ -70,17 +79,24 @@ class Selector extends React.Component {
     const date = this.state.currentDay.date();
     const month = this.state.currentDay.month() + 1;
     const year = this.state.currentDay.year();
-
     this.props.onSelected(date, month, year, selection);
-    this.setState({
+
+    const newSelected = {
+      day: moment().date(),
+      month: moment().month() + 1,
+      year: moment().year(),
+    };
+
+    this.saveLastSelectedDate(newSelected).then(newSelected => {
+      this.setState({
         hasSelected: true,
         lastSelectedDate: {
-          day: moment().date(),
-          month: moment().month() + 1,
-          year: moment().year(),
+          day: newSelected.day,
+          month: newSelected.month,
+          year: newSelected.year,
         },
-      }
-    );
+      });
+    });
   }
 
   timeTillNextSelect() {

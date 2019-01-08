@@ -16,8 +16,11 @@ const loadItem = async key => {
 
 const saveItem = async (key, item) => {
   try {
-    await AsyncStorage.setItem(key, item);
-    // console.log(`Saved item: ${item} to key: ${key}`);
+    await AsyncStorage.setItem(key, JSON.stringify(item));
+    console.log('Saved item:');
+    console.log(item);
+    console.log(key);
+    return item;
   } catch (error) {
     console.log(`Error saving data\n${error}`);
   }
@@ -34,7 +37,7 @@ const saveRecord = async (date, month, year, value) => {
       // there is a month add it and save
       tempMonth[date] = value;
     }
-    await saveItem(`${month}-${year}`, JSON.stringify(tempMonth));
+    await saveItem(`${month}-${year}`, tempMonth);
     // console.log(`Saved month ${month}-${year} at date ${date}\n${tempMonth}`);
     return tempMonth;
   } catch (error) {

@@ -3,7 +3,7 @@ import {Text, View, StyleSheet, FlatList, Dimensions, AsyncStorage} from 'react-
 import Month from './Month';
 import Selector from './Selector';
 import CustomButton from './CustomButton';
-import { saveRecord, clear, getMonth } from '../util/LocalStorage';
+import { saveRecord, clear, getMonth, saveItem } from '../util/LocalStorage';
 import moment from 'moment';
 
 const formatData = (data, numColumns) => {
@@ -108,7 +108,7 @@ export default class App extends Component {
           /> */}
           <CustomButton
             text="clear"
-            onPress={() => clear(1, 2019)}
+            onPress={() => saveItem('last-selected-date', null)}
             color='#ffed91'
           />
         </View> 
