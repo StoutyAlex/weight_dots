@@ -77,6 +77,7 @@ class Settings extends React.Component {
   )
 
   // Implement mobx stores
+  // Remove exploit to record 2 times a day
 
   render() {
     const { navigate } = this.props.navigation;
