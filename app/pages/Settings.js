@@ -76,6 +76,8 @@ class Settings extends React.Component {
     />
   )
 
+  // Implement mobx stores
+
   render() {
     const { navigate } = this.props.navigation;
     return (
