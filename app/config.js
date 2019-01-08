@@ -5,6 +5,10 @@ const Config = {
   maxColumns: 8,
   minColumns: 7,
   numColumns: 7,
+  defaultLogTime: {
+    hour: 21,
+    minute: 0,
+  },
   cell: {
     shape: 'SQUARE'
   },

@@ -2,8 +2,9 @@ import React from 'react';
 import { View, Text, StyleSheet, Dimensions, TouchableHighlight } from 'react-native';
 import CustomButton from './CustomButton';
 import TimerCountdown from 'react-native-timer-countdown';
-import moment from 'moment';
+import moment, { min } from 'moment';
 import { saveItem, loadItem } from '../util/LocalStorage';
+import Config from '../config';
 
 // TODO Implement configStore for user configuration 
 // To reduce localstorage function calls
@@ -18,6 +19,10 @@ class Selector extends React.Component {
           month: 1,
           year: 2019,
         },
+        dailyLogTime: {
+          hour: Config.defaultLogTime.hour,
+          minute: Config.defaultLogTime.minute,
+        }
     };
   }
 
@@ -35,6 +40,20 @@ class Selector extends React.Component {
         this.setState({ lastSelectedDate: date });
       }
     });
+    loadItem('daily-log-time').then(time => {
+      if (time) {
+        this.setState({
+          dailyLogTime: {
+            hour: time.hour,
+            minute: time.minute,
+          }
+        })
+      }
+    })
+  }
+  
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
   componentDidMount() {
@@ -104,12 +123,13 @@ class Selector extends React.Component {
     const yesterday = moment().subtract(1, 'days');
     const prev = this.state.lastSelectedDate;
     let countTo = 0;
+    const { hour, minute } = this.state.dailyLogTime;
 
     if (currentTime.date() === prev.day && currentTime.month() + 1 === prev.month && currentTime.year() === prev.year){
       const tomorrow = moment().add({days: 1});
-      countTo = tomorrow.hour(21).minute(0).second(0).unix() // Change back to hour 21
+      countTo = tomorrow.hour(hour).minute(minute).second(0).unix() // Change back to hour 21
     } else if (yesterday.date() == prev.day && yesterday.month() + 1 === prev.month && yesterday.year() === prev.year){
-      countTo = moment().hour(21).minute(0).second(0).unix(); // Change back to hour 21
+      countTo = moment().hour(hour).minute(minute).second(0).unix(); // Change back to hour 21
     }
     const timeTillNextSelect = countTo - currentTime.unix();
     return timeTillNextSelect;
