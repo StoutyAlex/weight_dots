@@ -1,8 +1,9 @@
-import { createStackNavigator, createAppContainer } from 'react-navigation';
+import React from 'react';
+import { createStackNavigator } from 'react-navigation';
 import Homepage from '../pages/Homepage';
 import Settings from '../pages/Settings';
 
-const App = createStackNavigator({
+const AppNavigator = createStackNavigator({
   Home: {
     screen: Homepage,
     navigationOptions: {
@@ -17,4 +18,8 @@ const App = createStackNavigator({
   },
 });
 
-export default createAppContainer(App);
+export default class App extends React.Component {
+  render() {
+    return <AppNavigator />
+  }
+}

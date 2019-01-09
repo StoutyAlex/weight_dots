@@ -84,7 +84,7 @@ class Homepage extends React.Component {
             onSelected={this.onSelected.bind(this)}
           />
             <CustomButton
-              text="nav"
+              text="clear"
               onPress={() => saveItem('last-selected-date', null)}
               color='#ffed91'
             />
